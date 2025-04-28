@@ -19,7 +19,7 @@ class UserController extends BaseController
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users,username|max:255',
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -44,5 +44,18 @@ class UserController extends BaseController
         ]);
         $this->userService->updatePassword($id, $validated);
         return $this->sendResponse("Password successfully updated");
+    }
+
+    public function uploadProfilePhoto(Request $request, $id): JsonResponse
+    {
+        $request->validate([
+            'profile_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+        return $this->userService->uploadProfilePhoto($id, $request);
+    }
+
+    public function deleteProfilePhoto($id)
+    {
+        $this->userService->deleteProfilPhoto($id);
     }
 }
