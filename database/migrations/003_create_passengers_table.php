@@ -13,11 +13,11 @@ return new class extends Migration {
             $table->foreignId('booking_id')
                 ->constrained('bookings')
                 ->onDelete('cascade');
-            $table->string('phone_number');
-            $table->string('seat_number')->nullable();
-            $table->string('name')->nullable();
-            $table->string('surname')->nullable();
-            $table->boolean('is_female')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('seat_number');
+            $table->string('name');
+            $table->string('surname');
+            $table->boolean('is_female');
             $table->date('date_of_birth');
             $table->timestamps();
         });

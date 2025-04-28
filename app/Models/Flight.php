@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Enums\City;
 use App\Models\Enums\Aircraft;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Flight extends Model
 {
@@ -33,7 +34,7 @@ class Flight extends Model
         'booked_seats' => 'array',
     ];
 
-    public function airport()
+    public function airport(): BelongsTo
     {
         return $this->belongsTo(Airport::class);
     }

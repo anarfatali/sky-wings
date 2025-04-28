@@ -10,19 +10,19 @@ return new class extends Migration {
     {
         Schema::create('flights', function (Blueprint $table) {
             $table->id();
-            $table->string('from')->nullable();
-            $table->string('to')->nullable();
-            $table->dateTime('flight_date')->nullable();
-            $table->dateTime('arrival_date')->nullable();
-            $table->string('aircraft')->nullable();
+            $table->string('from');
+            $table->string('to');
+            $table->dateTime('flight_date');
+            $table->dateTime('arrival_date');
+            $table->string('aircraft');
             $table->integer('econom_free_seats')->nullable();
             $table->integer('business_free_seats')->nullable();
             $table->decimal('econom_price', 8, 2)->nullable();
             $table->decimal('business_price', 8, 2)->nullable();
-            $table->string('flight_number')->unique();
+            $table->string('flight_number');
             $table->integer('free_seats')->nullable();
             $table->text('booked_seats')->nullable();
-            $table->foreignId('airport_id')->nullable()->constrained('airports')->onDelete('set null');
+            $table->foreignId('airport_id')->constrained('airports')->onDelete('set null');
             $table->timestamps();
         });
 
