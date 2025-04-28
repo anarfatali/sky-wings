@@ -2,11 +2,32 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    public function render($request, Throwable $e): JsonResponse
+    {
+        if ($e instanceof ModelNotFoundException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Resource not found'
+            ], 404);
+        }
+
+        if ($e instanceof BadRequestException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bad request'
+            ], 400);
+        }
+
+        return parent::render($request, $e);
+    }
+
     /**
      * A list of exception types with their corresponding custom log levels.
      *

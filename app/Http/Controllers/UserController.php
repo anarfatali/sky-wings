@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+class UserController extends BaseController
+{
+
+    private UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email|max:255',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        return $this->sendDataResponse(
+            $this->userService->create($validated),
+            "User successfully created",
+            201
+        );
+    }
+
+    public function show($id): JsonResponse
+    {
+        return $this->sendDataResponse($this->userService->getById($id));
+    }
+
+    public function updatePassword(Request $request, $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'old_password' => 'required|string|min:6',
+            'new_password' => 'required|string|min:6',
+        ]);
+        $this->userService->updatePassword($id, $validated);
+        return $this->sendResponse("Password successfully updated");
+    }
+}
