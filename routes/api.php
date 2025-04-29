@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\FlightController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/auth', [AuthController::class, 'signIn']);
+Route::post('/auth/signIn', [AuthController::class, 'signIn']);
 
 Route::get('/users/{id}', [UserController::class, 'show']);
 
@@ -41,3 +42,15 @@ Route::post('/bookings', [BookingController::class, 'store']);
 Route::get('/bookings/my-flights', [BookingController::class, 'showMyFlights']);
 
 Route::get('/bookings/history', [BookingController::class, 'showHistory']);
+
+Route::get('flights', [FlightController::class, 'index']);
+
+Route::get('flights/{id}', [FlightController::class, 'show']);
+
+Route::get('flights/search', [FlightController::class, 'search']);
+
+Route::post('flights', [FlightController::class, 'store']);
+
+Route::put('flights/{id}', [FlightController::class, 'update']);
+
+Route::delete('flights/{id}', [FlightController::class, 'destroy']);
