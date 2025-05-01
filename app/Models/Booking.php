@@ -11,11 +11,13 @@ class Booking extends Model
     protected $fillable = [
         'created_by',
         'flight_id',
+        'isBusiness',
         'total_price',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
+        'isBusiness' => 'boolean',
         'total_price' => 'decimal:2',
     ];
 

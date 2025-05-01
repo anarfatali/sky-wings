@@ -10,10 +10,11 @@ return new class extends Migration {
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->string('created_by')->nullable();
+            $table->integer('created_by')->nullable();
             $table->foreignId('flight_id')
                 ->constrained('flights')
                 ->onDelete('cascade');
+            $table->boolean('isBusiness')->default(false);
             $table->decimal('total_price', 10, 2)->default(0);
             $table->timestamps();
         });
