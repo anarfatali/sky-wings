@@ -19,10 +19,10 @@ class BookingController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->header(), [
-            'User-Id' => 'required|exists:users,id'
+            'user-id' => 'required|exists:users,id'
         ]);
         if ($validator->fails()) {
-            return $this->sendError("User-Id is missing or invalid.");
+            return $this->sendError("user-id is missing or invalid.");
         }
         $userId = (int)$request->header('user-id');
 
@@ -44,10 +44,10 @@ class BookingController extends BaseController
     public function showMyFlights(Request $request): JsonResponse
     {
         $validator = Validator::make($request->header(), [
-            'User-Id' => 'required|exists:users,id'
+            'user-id' => 'required|exists:users,id'
         ]);
         if ($validator->fails()) {
-            return $this->sendError("User-Id is missing or invalid.");
+            return $this->sendError("user-id is missing or invalid.");
         }
         $userId = (int)$request->header('user-id');
         return $this->sendDataResponse($this->bookingService->getMyFlights($userId));
@@ -56,10 +56,10 @@ class BookingController extends BaseController
     public function showHistory(Request $request): JsonResponse
     {
         $validator = Validator::make($request->header(), [
-            'User-Id' => 'required|exists:users,id'
+            'user-id' => 'required|exists:users,id'
         ]);
         if ($validator->fails()) {
-            return $this->sendError("User-Id is missing or invalid.");
+            return $this->sendError("user-id is missing or invalid.");
         }
         $userId = (int)$request->header('user-id');
         return $this->sendDataResponse($this->bookingService->getHistory($userId));

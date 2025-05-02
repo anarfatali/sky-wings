@@ -12,7 +12,13 @@ class UserService
 
     function getById(int $id)
     {
-        return null;
+        $user = User::query()->findOrFail($id);
+        return [
+            'id' => $user->id,
+            'username' => $user->username,
+            'email' => $user->email,
+            'profile_photo' => $user->profile_photo
+        ];
 
     }
 
@@ -29,43 +35,49 @@ class UserService
     public function updatePassword($id, array $validated)
     {
         $user = User::query()->findOrFail($id);
-        if (!password_verify($validated['password'], $user->password)) {
+        if (!password_verify($validated['old_password'], $user->password)) {
             throw new BadRequestHttpException('Wrong password');
         }
-        //ardi var
+        $user->password = password_hash($validated['new_password'], PASSWORD_DEFAULT);
+        $user->save();
     }
 
     public function uploadProfilePhoto($id, $request): JsonResponse
     {
         $user = User::query()->findOrFail($id);
 
-        if ($request->hasFile('profile_photo')) {
-            $file = $request->file('profile_photo');
-            $path = $file->store('profile_photos', 'public');
+        $file = $request->file('profile_photo');
+        $path = $file->store('profile_photos', 'public');
 
-            if ($user->profile_photo) {
-                Storage::disk('public/profile_photos')->delete($user->profile_photo);
-            }
-
-            $user->profile_photo = basename($path);
-            $user->save();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Profile photo uploaded successfully.',
-                'data' => [
-                    'profile_photo_url' => asset('storage/' . $path)
-                ]
-            ]);
+        if ($user->profile_photo) {
+            $this->deleteProfilPhoto($id);
         }
-        throw new BadRequestHttpException('Profile photo upload failed.');
+
+        $user->profile_photo = basename($path);
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile photo uploaded successfully.',
+            'data' => [
+                'profile_photo_url' => asset('storage/' . $path)
+            ]
+        ]);
     }
 
     public function deleteProfilPhoto($id)
     {
-        $user = User::query()->findOrFail($id);
-        if ($user->profil_photo) {
-            Storage::disk('public/profile_photos')->delete($user->profile_photo);
+        $user = User::findOrFail($id);
+
+        if ($user->profile_photo) {
+            $filePath = 'profile_photos/' . $user->profile_photo;
+
+            if (Storage::disk('public')->exists($filePath)) {
+                Storage::disk('public')->delete($filePath);
+            }
+
+            $user->profile_photo = null;
+            $user->save();
         }
     }
 }

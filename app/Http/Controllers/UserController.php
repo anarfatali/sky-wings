@@ -36,13 +36,14 @@ class UserController extends BaseController
         return $this->sendDataResponse($this->userService->getById($id));
     }
 
-    public function updatePassword(Request $request, $id): JsonResponse
+    public function updatePassword(Request $request): JsonResponse
     {
+        $userId = (int)$request->header('user-id');
         $validated = $request->validate([
             'old_password' => 'required|string|min:6',
             'new_password' => 'required|string|min:6',
         ]);
-        $this->userService->updatePassword($id, $validated);
+        $this->userService->updatePassword($userId, $validated);
         return $this->sendResponse("Password successfully updated");
     }
 
