@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,3 +32,10 @@ Route::patch('/users/password/{id}', [UserController::class, 'updatePassword']);
 Route::post('/users/upload-photo/{id}', [UserController::class, 'uploadProfilePhoto']);
 
 Route::patch('/users/delete-photo/{id}', [UserController::class, 'deleteProfilePhoto']);
+
+
+Route::post('/bookings', [BookingController::class, 'store']);
+
+Route::get('/bookings/my-flights', [BookingController::class, 'showMyFlights']);
+
+Route::get('/bookings/history', [BookingController::class, 'showHistory']);

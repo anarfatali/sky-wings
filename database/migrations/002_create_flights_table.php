@@ -15,13 +15,13 @@ return new class extends Migration {
             $table->dateTime('flight_date');
             $table->dateTime('arrival_date');
             $table->string('aircraft');
-            $table->integer('econom_free_seats')->nullable();
-            $table->integer('business_free_seats')->nullable();
+            $table->integer('total_seats');
+            $table->integer('econom_free_seats');
+            $table->integer('business_free_seats');
+            $table->text('booked_seats')->nullable();
             $table->decimal('econom_price', 8, 2)->nullable();
             $table->decimal('business_price', 8, 2)->nullable();
             $table->string('flight_number');
-            $table->integer('free_seats')->nullable();
-            $table->text('booked_seats')->nullable();
             $table->foreignId('airport_id')->constrained('airports')->onDelete('set null');
             $table->timestamps();
         });
