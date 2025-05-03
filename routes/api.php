@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/auth/signIn', [AuthController::class, 'signIn']);
+Route::post('/auth', [AuthController::class, 'signIn']);
 
 Route::get('/users/{id}', [UserController::class, 'show']);
 
@@ -29,9 +29,9 @@ Route::post('/users', [UserController::class, 'store']);
 
 Route::patch('/users/password/{id}', [UserController::class, 'updatePassword']);
 
-Route::post('/users/upload-photo/{id}', [UserController::class, 'uploadProfilePhoto']);
+Route::post('/users/{id}/upload-photo', [UserController::class, 'uploadProfilePhoto']);
 
-Route::patch('/users/delete-photo/{id}', [UserController::class, 'deleteProfilePhoto']);
+Route::patch('/users/{id}/delete-photo', [UserController::class, 'deleteProfilePhoto']);
 
 
 Route::post('/bookings', [BookingController::class, 'store']);
