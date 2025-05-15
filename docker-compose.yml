@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www
+    environment:
+    - DB_HOST=postgres
+    - DB_PORT=5432
+    - DB_DATABASE=sky-wings
+    - DB_USERNAME=postgres
+    - DB_PASSWORD=postgres
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    networks:
+      - laravel
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: sky-wings
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - laravel
+
+volumes:
+  db_data:
+
+networks:
+  laravel:
