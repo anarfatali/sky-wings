@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Exceptions\BadRequestException;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UserService
 {
@@ -36,9 +36,21 @@ class UserService
     {
         $user = User::query()->findOrFail($id);
         if (!password_verify($validated['old_password'], $user->password)) {
-            throw new BadRequestHttpException('Wrong password');
+            throw new BadRequestException('Wrong password');
+        }
+        if ($validated['new_password'] !== $validated['confirm_password']) {
+            throw new BadRequestException('New password and confirm password do not match');
         }
         $user->password = password_hash($validated['new_password'], PASSWORD_DEFAULT);
+        $user->save();
+    }
+
+    public function updateEmail($id, string $email)
+    {
+        $user = User::query()->findOrFail($id);
+        $user->update([
+            'email' => $email
+        ]);
         $user->save();
     }
 
