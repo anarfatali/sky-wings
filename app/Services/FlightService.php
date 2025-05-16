@@ -7,17 +7,15 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class FlightService
 {
     public function getAllByDate(string $date): Builder
     {
         $start = Carbon::parse($date)->startOfDay();
-        $end = Carbon::parse($date)->endOfDay();
 
-        return Flight::query()
-            ->whereBetween('flight_date', [$start, $end])
-            ->orderBy('flight_date');
+        return Flight::query()->where('flight_date', $start); //Pagination
     }
 
     public function getById(int $id): Model|Collection|Builder|array|null
@@ -25,37 +23,49 @@ class FlightService
         return Flight::query()->findOrFail($id);
     }
 
-    public function search(array $filter): Builder
+    public function search(array $filter, bool $isBusiness): Builder
     {
-        $query = Flight::query();
+        $flight = Flight::query();
 
         if (!empty($filter['from'])) {
-            $query->where('from', $filter['from']);
+            $flight->where('from', $filter['from']);
         }
         if (!empty($filter['to'])) {
-            $query->where('to', $filter['to']);
+            $flight->where('to', $filter['to']);
         }
 
         if (!empty($filter['date'])) {
-            $query->where('flight_date', $filter['date']);
+            $flight->where('flight_date', $filter['date']);
         }
 
-        return $query->orderBy('flight_date');
-    }
+        if (!empty($filter['passenger_count'])) {
+            $n = (int) $filter['passenger_count'];
 
+            if ($isBusiness) {
+                $flight->where('business_free_seats', '>=', $n);
+            } else {
+                $flight->where('econom_free_seats', '>=', $n);
+            }
+        }
+
+        return $flight->orderBy('flight_date');
+    }
 
     public function create(int $userId, array $payload): Builder|Model
     {
-        $payload['created_by'] = $userId;
+        return DB::transaction(function () use ($userId, $payload) {
+            $payload['created_by'] = $userId;
+            //check if user is admin
 
-        $payload = Flight::query()->create($payload);
+            $payload = Flight::query()->create($payload);
 
-        return $payload->id;
+            return $payload->id;
+        });
     }
-
 
     public function update(int $userId, int $flightId, array $payload): void
     {
+        //check if user is admin
         $flight = Flight::query()->findOrFail($flightId);
 
         $payload['updated_by'] = $userId;
@@ -65,6 +75,7 @@ class FlightService
 
     public function delete(int $flightId): void
     {
+        //check if user is admin
         $flight = Flight::query()->findOrFail($flightId);
 
         $flight->delete();
