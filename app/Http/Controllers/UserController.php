@@ -42,9 +42,20 @@ class UserController extends BaseController
         $validated = $request->validate([
             'old_password' => 'required|string|min:6',
             'new_password' => 'required|string|min:6',
+            'confirm_password' => 'required|string|min:6'
         ]);
         $this->userService->updatePassword($userId, $validated);
         return $this->sendResponse("Password successfully updated");
+    }
+
+    public function updateEmail(Request $request): JsonResponse
+    {
+        $userId = (int)$request->header('user-id');
+        $validated = $request->validate([
+            'email' => 'required|email|unique:users,email|max:255'
+        ]);
+        $this->userService->updateEmail($userId, $validated["email"]);
+        return $this->sendResponse("Email successfully updated");
     }
 
     public function uploadProfilePhoto(Request $request, $id): JsonResponse

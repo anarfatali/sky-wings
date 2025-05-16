@@ -27,7 +27,9 @@ Route::get('/users/{id}', [UserController::class, 'show']);
 
 Route::post('/users', [UserController::class, 'store']);
 
-Route::patch('/users/password/{id}', [UserController::class, 'updatePassword']);
+Route::patch('/users/password', [UserController::class, 'updatePassword']);
+
+Route::patch('/users/email', [UserController::class, 'updateEmail']);
 
 Route::post('/users/{id}/upload-photo', [UserController::class, 'uploadProfilePhoto']);
 
