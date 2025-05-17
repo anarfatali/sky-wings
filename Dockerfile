@@ -6,8 +6,6 @@ WORKDIR /app
 COPY . .
 RUN composer install --no-dev --prefer-dist --optimize-autoloader
 
-COPY . .
-
 # Stage 2: Runtime Stage
 FROM php:8.2-fpm-alpine
 

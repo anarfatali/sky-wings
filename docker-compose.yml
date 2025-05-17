@@ -1,10 +1,7 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/var/www
+    container_name: app
+    build: .
     environment:
     - DB_HOST=postgres
     - DB_PORT=5432
