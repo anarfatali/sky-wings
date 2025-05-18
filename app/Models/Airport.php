@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\enums\City;
 use Illuminate\Database\Eloquent\Model;
 
 class Airport extends Model
@@ -11,6 +12,9 @@ class Airport extends Model
     protected $fillable = [
         'name',
         'city',
-        'code',
+    ];
+
+    protected $casts = [
+        'city' => City::class
     ];
 }
