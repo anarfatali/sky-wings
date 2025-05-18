@@ -10,29 +10,43 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Flight extends Model
 {
     protected $fillable = [
-        'from',
-        'to',
+        'departure_airport_id',
+        'arrival_airport_id',
         'flight_date',
         'arrival_date',
         'aircraft',
+        'total_seats',
         'econom_free_seats',
         'business_free_seats',
         'econom_price',
         'business_price',
         'flight_number',
-        'free_seats',
-        'booked_seats',
-        'airport_id',
+        'booked_seats'
     ];
 
     protected $casts = [
         'flight_date' => 'datetime',
         'arrival_date' => 'datetime',
-        'from' => City::class,
-        'to' => City::class,
         'aircraft' => Aircraft::class,
         'booked_seats' => 'array',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Flight $flight) {
+            $flight->total_seats = $flight->econom_free_seats + $flight->business_free_seats;
+
+            if (empty($flight->flight_number)) {
+                $flight->flight_number = self::generateFlightNumber();
+            }
+        });
+    }
+
+    private static function generateFlightNumber(): string
+    {
+        $lastDigit = random_int(0, 9);
+        return "J2 810{$lastDigit}";
+    }
 
     public function airport(): BelongsTo
     {

@@ -19,10 +19,10 @@ class FlightController extends BaseController
     public function index(Request $request): JsonResponse
     {
         $headerValidator = Validator::make($request->header(), [
-            'User-Id' => 'required|exists:users,id',
+            'user-id' => 'required|exists:users,id',
         ]);
         if ($headerValidator->fails()) {
-            return $this->sendError('User-Id header is missing or invalid.');
+            return $this->sendError('user-id header is missing or invalid.');
         }
         $userId = (int)$request->header('user-id');
 
@@ -41,36 +41,29 @@ class FlightController extends BaseController
         return $this->sendDataResponse($flights);
     }
 
-    public function show($flightId): JsonResponse
+    public function show($flightId)
     {
-        return $this->sendDataResponse($this->flightService->getById($flightId));
+        return $this->sendDataResponse($this->flightService->getById((int)$flightId));
     }
 
     public function search(Request $request): JsonResponse
     {
         $headerValidator = Validator::make($request->header(), [
-            'User-Id' => 'required|exists:users,id',
+            'user-id' => 'required|exists:users,id',
         ]);
 
         if ($headerValidator->fails()) {
-            return $this->sendError('User-Id header is missing or invalid.');
+            return $this->sendError('user-id header is missing or invalid.');
         }
 
-        $validator = Validator::make($request->all(), [
-            'from' => 'nullable|string',
-            'to' => 'nullable|string',
-            'date' => 'nullable|date_format:Y-m-d',
-            'passenger_count' => 'nullable|integer|min:1',
-            'isBusiness' => 'nullable|boolean',
+        $validated = $request->validate([
+            'from' => 'required|string',
+            'to' => 'required|string',
+            'date' => 'date_format:Y-m-d',
+            'passenger_count' => 'integer|min:1|max:8',
         ]);
 
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors()->first());
-        }
-        $filter = $validator->validated();
-        $isBusiness = $filter['isBusiness'] ?? false;
-
-        $results = $this->flightService->search($filter, $isBusiness);
+        $results = $this->flightService->search($validated);
 
         return $this->sendDataResponse($results);
     }
@@ -78,25 +71,24 @@ class FlightController extends BaseController
     public function store(Request $request): JsonResponse
     {
         $headerValidator = Validator::make($request->header(), [
-            'User-Id' => 'required|exists:users,id',
+            'user-id' => 'required|exists:users,id',
         ]);
 
         if ($headerValidator->fails()) {
-            return $this->sendError('User-Id header is missing or invalid.');
+            return $this->sendError('user-id header is missing or invalid.');
         }
         $userId = (int)$request->header('user-id');
 
         $validator = Validator::make($request->all(), [
-            'from' => 'required|string',
-            'to' => 'required|string',
+            'departure_airport_id' => 'required|exists:airports,id',
+            'arrival_airport_id' => 'required|exists:airports,id',
             'flight_date' => 'required|date',
             'arrival_date' => 'required|date|after:flight_date',
             'aircraft' => 'required|string',
-            'total_seats' => 'required|integer|min:1',
+            'econom_free_seats' => 'required|integer|min:0',
+            'business_free_seats' => 'required|integer|min:0',
             'econom_price' => 'nullable|numeric|min:0',
-            'business_price' => 'nullable|numeric|min:0',
-            'flight_number' => 'required|string',
-            'airport_id' => 'required|exists:airports,id',
+            'business_price' => 'nullable|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -112,11 +104,11 @@ class FlightController extends BaseController
     public function update(Request $request, int $flightId): JsonResponse
     {
         $headerValidator = Validator::make($request->header(), [
-            'User-Id' => 'required|exists:users,id',
+            'user-id' => 'required|exists:users,id',
         ]);
 
         if ($headerValidator->fails()) {
-            return $this->sendError('User-Id header is missing or invalid.');
+            return $this->sendError('user-id header is missing or invalid.');
         }
         $userId = (int)$request->header('user-id');
 

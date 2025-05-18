@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('city');
-            $table->string('code', 10)->unique();
+            $table->timestamps();
         });
     }
 

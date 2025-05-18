@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AirportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\EnumController;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -43,6 +45,7 @@ Route::get('/bookings/my-flights', [BookingController::class, 'showMyFlights']);
 
 Route::get('/bookings/history', [BookingController::class, 'showHistory']);
 
+
 Route::get('flights', [FlightController::class, 'index']);
 
 Route::get('flights/{id}', [FlightController::class, 'show']);
@@ -54,3 +57,13 @@ Route::post('flights', [FlightController::class, 'store']);
 Route::put('flights/{id}', [FlightController::class, 'update']);
 
 Route::delete('flights/{id}', [FlightController::class, 'destroy']);
+
+
+Route::post('airports', [AirportController::class, 'store']);
+
+Route::get('airports', [AirportController::class, 'getAll']);
+
+
+Route::get("enum/cities", [EnumController::class, 'cities']);
+
+Route::get("enum/aircrafts", [EnumController::class, 'aircrafts']);

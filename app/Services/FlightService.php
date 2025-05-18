@@ -4,54 +4,43 @@ namespace App\Services;
 
 use App\Models\Flight;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class FlightService
 {
-    public function getAllByDate(string $date): Builder
+    public function getAllByDate(string $date, int $userId)
     {
         $start = Carbon::parse($date)->startOfDay();
+        $end = Carbon::parse($date)->endOfDay();
 
-        return Flight::query()->where('flight_date', $start); //Pagination
+        return Flight::query()->whereBetween('flight_date', [$start, $end])->paginate(5);
     }
 
-    public function getById(int $id): Model|Collection|Builder|array|null
+    public function getById(int $id)
     {
         return Flight::query()->findOrFail($id);
     }
 
-    public function search(array $filter, bool $isBusiness): Builder
+    public function search(array $filter)
     {
-        $flight = Flight::query();
-
-        if (!empty($filter['from'])) {
-            $flight->where('from', $filter['from']);
-        }
-        if (!empty($filter['to'])) {
-            $flight->where('to', $filter['to']);
-        }
-
-        if (!empty($filter['date'])) {
-            $flight->where('flight_date', $filter['date']);
-        }
-
-        if (!empty($filter['passenger_count'])) {
-            $n = (int) $filter['passenger_count'];
-
-            if ($isBusiness) {
-                $flight->where('business_free_seats', '>=', $n);
-            } else {
-                $flight->where('econom_free_seats', '>=', $n);
-            }
-        }
-
-        return $flight->orderBy('flight_date');
+        return Flight::query()
+            ->whereHas('departure_airport_id', function ($q) use ($filter) {
+                $q->where('city', $filter['from']);
+            })
+            ->whereHas('arrival_airport_id', function ($q) use ($filter) {
+                $q->where('city', $filter['to']);
+            })
+            ->whereBetween('flight_date', [
+                Carbon::parse($filter['date'])->startOfDay(),
+                Carbon::parse($filter['date'])->endOfDay(),
+            ])
+            ->where('business_free_seats' >= (int)$filter['passenger_count'])
+            ->orWhere('econom_free_seats' >= (int)$filter['passenger_count'])
+            ->orderBy('flight_date')
+            ->get();
     }
 
-    public function create(int $userId, array $payload): Builder|Model
+    public function create(int $userId, array $payload)
     {
         return DB::transaction(function () use ($userId, $payload) {
             $payload['created_by'] = $userId;
