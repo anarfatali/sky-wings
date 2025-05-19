@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AirportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
@@ -67,3 +68,12 @@ Route::get('airports', [AirportController::class, 'getAll']);
 Route::get("enum/cities", [EnumController::class, 'cities']);
 
 Route::get("enum/aircrafts", [EnumController::class, 'aircrafts']);
+
+
+Route::post("admin", [AdminController::class, 'store']);
+
+Route::get("admin", [AdminController::class, 'getAdmins']);
+
+Route::get("admin/{id}", [AdminController::class, 'getAdmin']);
+
+Route::post('admin/signIn', [AdminController::class, 'signIn']);
