@@ -50,7 +50,7 @@ Route::get('flights', [FlightController::class, 'index']);
 
 Route::get('flights/{id}', [FlightController::class, 'show']);
 
-Route::get('flights/search', [FlightController::class, 'search']);
+Route::post('flights/search', [FlightController::class, 'search']);
 
 Route::post('flights', [FlightController::class, 'store']);
 

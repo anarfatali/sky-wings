@@ -87,8 +87,8 @@ class FlightController extends BaseController
             'aircraft' => 'required|string',
             'econom_free_seats' => 'required|integer|min:0',
             'business_free_seats' => 'required|integer|min:0',
-            'econom_price' => 'nullable|numeric|min:0',
-            'business_price' => 'nullable|numeric|min:0'
+            'econom_price' => 'required|numeric|min:0',
+            'business_price' => 'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -113,16 +113,15 @@ class FlightController extends BaseController
         $userId = (int)$request->header('user-id');
 
         $validator = Validator::make($request->all(), [
-            'from' => 'sometimes|required|string',
-            'to' => 'sometimes|required|string',
+            'departure_airport_id' => 'sometimes|required|exists:airports,id',
+            'arrival_airport_id' => 'sometimes|required|exists:airports,id',
             'flight_date' => 'sometimes|required|date',
             'arrival_date' => 'sometimes|required|date|after:flight_date',
             'aircraft' => 'sometimes|required|string',
-            'total_seats' => 'sometimes|required|integer|min:1',
-            'econom_price' => 'nullable|numeric|min:0',
-            'business_price' => 'nullable|numeric|min:0',
-            'flight_number' => 'sometimes|required|string',
-            'airport_id' => 'sometimes|required|exists:airports,id',
+            'econom_free_seats' => 'sometimes|required|integer|min:0',
+            'business_free_seats' => 'sometimes|required|integer|min:0',
+            'econom_price' => 'sometimes|numeric|min:0',
+            'business_price' => 'sometimes|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
