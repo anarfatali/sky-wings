@@ -1,0 +1,23 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "User API",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/users": {
+            "get": {
+                "summary": "Get all users",
+                "operationId": "32f813ea7a22e2b8b862ef93084426b9",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved users"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        }
+    }
+}
