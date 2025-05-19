@@ -24,18 +24,18 @@ class FlightService
     public function search(array $filter)
     {
         return Flight::query()
-            ->whereHas('departure_airport_id', function ($q) use ($filter) {
+            ->whereHas('departureAirport', function ($q) use ($filter) {
                 $q->where('city', $filter['from']);
             })
-            ->whereHas('arrival_airport_id', function ($q) use ($filter) {
+            ->whereHas('arrivalAirport', function ($q) use ($filter) {
                 $q->where('city', $filter['to']);
             })
             ->whereBetween('flight_date', [
                 Carbon::parse($filter['date'])->startOfDay(),
                 Carbon::parse($filter['date'])->endOfDay(),
             ])
-            ->where('business_free_seats' >= (int)$filter['passenger_count'])
-            ->orWhere('econom_free_seats' >= (int)$filter['passenger_count'])
+            ->where('business_free_seats', '>=', (int)$filter['passenger_count'])
+            ->orWhere('econom_free_seats', '>=', (int)$filter['passenger_count'])
             ->orderBy('flight_date')
             ->get();
     }
