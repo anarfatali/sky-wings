@@ -12,10 +12,12 @@ class User extends Model
         'username',
         'email',
         'password',
+        'is_admin',
         'profile_photo'
     ];
 
     protected $hidden = [
+        'is_admin',
         'password'
     ];
 }
