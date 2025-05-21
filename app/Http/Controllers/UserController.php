@@ -93,7 +93,7 @@ class UserController extends BaseController
 
 
     /**
-     * @OA\patch(
+     * @OA\Patch(
      *     path="/api/users/password",
      *     summary="Update user password",
      *     tags={"User"},
