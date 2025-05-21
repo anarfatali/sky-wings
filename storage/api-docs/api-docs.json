@@ -6,6 +6,530 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/admin": {
+            "get": {
+                "tags": [
+                    "Admins"
+                ],
+                "summary": "Get all admins",
+                "operationId": "4d591b8bc6e9bc9494d2dd87c1032f02",
+                "responses": {
+                    "200": {
+                        "description": "List of admins"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admins"
+                ],
+                "summary": "Create a new admin",
+                "operationId": "8405ee30d2a8cacc8f0356194fb256ef",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "admin123"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Admin successfully created"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/admin/{id}": {
+            "get": {
+                "tags": [
+                    "Admins"
+                ],
+                "summary": "Get a specific admin by ID",
+                "operationId": "25771fd3394a046c032b0722a00cf908",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Admin details"
+                    },
+                    "404": {
+                        "description": "Admin not found"
+                    }
+                }
+            }
+        },
+        "/api/admin/signIn": {
+            "post": {
+                "tags": [
+                    "Admins"
+                ],
+                "summary": "Admin login",
+                "operationId": "a849ba553a87c18bb062b294de5c5dd9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "login",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "login": {
+                                        "type": "string",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Admin logged in successfully"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/api/airports": {
+            "get": {
+                "tags": [
+                    "Airports"
+                ],
+                "summary": "Get all airports",
+                "operationId": "062afca6ceb1e965380e0e9959145639",
+                "responses": {
+                    "200": {
+                        "description": "List of airports",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Heathrow Airport"
+                                            },
+                                            "city": {
+                                                "type": "string",
+                                                "example": "London"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Airports"
+                ],
+                "summary": "Create a new airport",
+                "operationId": "a757ecaef11f8db40b69a1a94f4783e4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "city"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Heathrow Airport"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "London"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Airport successfully added",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Airport successfully added"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/auth/signIn": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Authenticate a user by username or email",
+                "operationId": "b38f09fdcdaf6142142287783648fb14",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "login",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "login": {
+                                        "description": "Username or email",
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged in successfully."
+                                        },
+                                        "data": {
+                                            "type": "integer",
+                                            "example": 42
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email/Username or password is invalid"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/bookings": {
+            "post": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Create a new booking",
+                "operationId": "e33fa5a6507581f9b1e0d710a9a130d1",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "flight_id",
+                                    "isBusiness",
+                                    "passengers"
+                                ],
+                                "properties": {
+                                    "flight_id": {
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "isBusiness": {
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "passengers": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John"
+                                                },
+                                                "surname": {
+                                                    "type": "string",
+                                                    "example": "Doe"
+                                                },
+                                                "is_female": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "date_of_birth": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2000-01-01"
+                                                },
+                                                "seat_number": {
+                                                    "type": "string",
+                                                    "example": "12A"
+                                                },
+                                                "phone_number": {
+                                                    "type": "string",
+                                                    "example": "+123456789"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Booking created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Booking created."
+                                        },
+                                        "data": {
+                                            "type": "integer",
+                                            "example": 101
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/api/bookings/my-flights": {
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Get upcoming flights for authenticated user",
+                "operationId": "dc2aa1bafb372afcdd084cbc3600e1c0",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of upcoming flights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/bookings/history": {
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Get booking history for authenticated user",
+                "operationId": "3adb24dedf526c89fbf413cc54efd034",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking history",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/enum/aircrafts": {
+            "get": {
+                "tags": [
+                    "Enum"
+                ],
+                "summary": "Get list of aircraft types",
+                "operationId": "4a7a731c2ded3c17230abbcd907a31b3",
+                "responses": {
+                    "200": {
+                        "description": "List of aircrafts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "example": "Airbus A320"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/enum/cities": {
+            "get": {
+                "tags": [
+                    "Enum"
+                ],
+                "summary": "Get list of cities",
+                "operationId": "7e985da90bbf88b10269673dd41fb0eb",
+                "responses": {
+                    "200": {
+                        "description": "List of cities",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "example": "Baku"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/flights": {
             "get": {
                 "tags": [
@@ -14,6 +538,16 @@
                 "summary": "Get flights by date",
                 "operationId": "4baffc280d4c3e239575b8c57e979397",
                 "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
                     {
                         "name": "date",
                         "in": "query",
@@ -46,6 +580,18 @@
                 ],
                 "summary": "Create a new flight",
                 "operationId": "429a30d2ba9b4c386fd85eefd684225e",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -184,6 +730,16 @@
                 "operationId": "29d9b985eff7a7d40f56bd4a377854c9",
                 "parameters": [
                     {
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "description": "Flight ID",
@@ -298,6 +854,18 @@
                 ],
                 "summary": "Search for flights",
                 "operationId": "150ed1c7b5860c0e426df7636c01ede9",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -509,6 +1077,18 @@
                 ],
                 "summary": "Update user's email",
                 "operationId": "c2cd1f49582a2351256c715e30408325",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -681,6 +1261,26 @@
         }
     },
     "tags": [
+        {
+            "name": "Airports",
+            "description": "API Endpoints for managing airports"
+        },
+        {
+            "name": "Admins",
+            "description": "Admins"
+        },
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Bookings",
+            "description": "Bookings"
+        },
+        {
+            "name": "Enum",
+            "description": "Enum"
+        },
         {
             "name": "Flights",
             "description": "Flights"

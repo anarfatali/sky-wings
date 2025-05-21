@@ -22,6 +22,13 @@ class FlightController extends BaseController
      *     summary="Get flights by date",
      *     tags={"Flights"},
      *     @OA\Parameter(
+     *          name="user-id",
+     *          in="header",
+     *          required=true,
+     *          description="Authenticated user's ID",
+     *          @OA\Schema(type="integer", example=1)
+     *      ),
+     *     @OA\Parameter(
      *         name="date",
      *         in="query",
      *         required=true,
@@ -111,6 +118,13 @@ class FlightController extends BaseController
      *     summary="Search for flights",
      *     tags={"Flights"},
      *     security={{"sanctum":{}}},
+     *      @OA\Parameter(
+     *           name="user-id",
+     *           in="header",
+     *           required=true,
+     *           description="Authenticated user's ID",
+     *           @OA\Schema(type="integer", example=1)
+     *       ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -158,6 +172,13 @@ class FlightController extends BaseController
      *     summary="Create a new flight",
      *     tags={"Flights"},
      *     security={{"sanctum":{}}},
+     *      @OA\Parameter(
+     *           name="user-id",
+     *           in="header",
+     *           required=true,
+     *           description="Authenticated user's ID",
+     *           @OA\Schema(type="integer", example=1)
+     *       ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -231,6 +252,13 @@ class FlightController extends BaseController
      *     summary="Update flight by ID",
      *     tags={"Flights"},
      *     security={{"sanctum":{}}},
+     *      @OA\Parameter(
+     *           name="user-id",
+     *           in="header",
+     *           required=true,
+     *           description="Authenticated user's ID",
+     *           @OA\Schema(type="integer", example=1)
+     *       ),
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

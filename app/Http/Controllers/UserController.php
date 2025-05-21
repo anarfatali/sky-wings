@@ -138,6 +138,13 @@ class UserController extends BaseController
      *     summary="Update user's email",
      *     tags={"User"},
      *     security={{"sanctum":{}}},
+     *      @OA\Parameter(
+     *           name="user-id",
+     *           in="header",
+     *           required=true,
+     *           description="Authenticated user's ID",
+     *           @OA\Schema(type="integer", example=1)
+     *       ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -238,5 +245,4 @@ class UserController extends BaseController
     {
         $this->userService->deleteProfilPhoto($id);
     }
-
 }
