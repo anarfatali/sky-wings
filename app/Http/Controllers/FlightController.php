@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\enums\City;
 use App\Services\FlightService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Enum;
 
 class FlightController extends BaseController
 {
@@ -125,8 +127,8 @@ class FlightController extends BaseController
     public function search(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'from' => 'required|string',
-            'to' => 'required|string',
+            'from' => ['required', new Enum(City::class)],
+            'to' => ['required', new Enum(City::class)],
             'date' => 'date_format:Y-m-d',
             'passenger_count' => 'integer|min:1|max:8',
         ]);
