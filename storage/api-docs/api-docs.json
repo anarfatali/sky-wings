@@ -539,16 +539,6 @@
                 "operationId": "4baffc280d4c3e239575b8c57e979397",
                 "parameters": [
                     {
-                        "name": "user-id",
-                        "in": "header",
-                        "description": "Authenticated user's ID",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    },
-                    {
                         "name": "date",
                         "in": "query",
                         "required": true,
@@ -580,18 +570,6 @@
                 ],
                 "summary": "Create a new flight",
                 "operationId": "429a30d2ba9b4c386fd85eefd684225e",
-                "parameters": [
-                    {
-                        "name": "user-id",
-                        "in": "header",
-                        "description": "Authenticated user's ID",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    }
-                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -730,16 +708,6 @@
                 "operationId": "29d9b985eff7a7d40f56bd4a377854c9",
                 "parameters": [
                     {
-                        "name": "user-id",
-                        "in": "header",
-                        "description": "Authenticated user's ID",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    },
-                    {
                         "name": "id",
                         "in": "path",
                         "description": "Flight ID",
@@ -854,18 +822,6 @@
                 ],
                 "summary": "Search for flights",
                 "operationId": "150ed1c7b5860c0e426df7636c01ede9",
-                "parameters": [
-                    {
-                        "name": "user-id",
-                        "in": "header",
-                        "description": "Authenticated user's ID",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    }
-                ],
                 "requestBody": {
                     "required": true,
                     "content": {
