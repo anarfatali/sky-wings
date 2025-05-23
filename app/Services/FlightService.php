@@ -50,10 +50,13 @@ class FlightService
                 Carbon::parse($filter['date'])->startOfDay(),
                 Carbon::parse($filter['date'])->endOfDay(),
             ])
-            ->where('business_free_seats', '>=', (int)$filter['passenger_count'])
-            ->orWhere('econom_free_seats', '>=', (int)$filter['passenger_count'])
+            ->where(function ($q) use ($filter) {
+                $q->where('business_free_seats', '>=', (int)$filter['passenger_count'])
+                    ->orWhere('econom_free_seats', '>=', (int)$filter['passenger_count']);
+            })
             ->orderBy('flight_date')
             ->get();
+
         return $flights->map(fn($flight) => FlightMapper::toResponse($flight));
     }
 
