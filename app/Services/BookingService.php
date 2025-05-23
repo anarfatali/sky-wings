@@ -74,9 +74,6 @@ class BookingService
     {
         return Booking::query()
             ->where('created_by', $userId)
-            ->whereHas('flight', function ($query) {
-                $query->where('flight_date', '<', Carbon::now());
-            })
             ->with('flight')
             ->get()
             ->map(fn($booking) => BookingMapper::toResponse($booking));
