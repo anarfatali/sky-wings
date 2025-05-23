@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/auth/signIn', [AuthController::class, 'signIn']);
 
-Route::get('/users/{id}', [UserController::class, 'show']);
+Route::get('/users', [UserController::class, 'show']);
 
 Route::post('/users', [UserController::class, 'store']);
 
@@ -35,9 +35,9 @@ Route::patch('/users/password', [UserController::class, 'updatePassword']);
 
 Route::patch('/users/email', [UserController::class, 'updateEmail']);
 
-Route::post('/users/{id}/upload-photo', [UserController::class, 'uploadProfilePhoto']);
+Route::post('/users/upload-photo', [UserController::class, 'uploadProfilePhoto']);
 
-Route::patch('/users/{id}/delete-photo', [UserController::class, 'deleteProfilePhoto']);
+Route::patch('/users/delete-photo', [UserController::class, 'deleteProfilePhoto']);
 
 
 Route::post('/bookings', [BookingController::class, 'store']);

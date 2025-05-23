@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\enums\Aircraft;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Enums\City;
-use App\Models\Enums\Aircraft;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Flight extends Model

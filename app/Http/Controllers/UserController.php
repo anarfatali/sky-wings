@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 
 /**
@@ -66,16 +67,16 @@ class UserController extends BaseController
 
     /**
      * @OA\Get(
-     *     path="/api/users/{id}",
+     *     path="/api/users",
      *     summary="Get user by ID",
      *     tags={"User"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="ID of the user",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *      @OA\Parameter(
+     *           name="user-id",
+     *           in="header",
+     *           required=true,
+     *           description="Authenticated user's ID",
+     *           @OA\Schema(type="integer", example=1)
+     *       ),
      *     @OA\Response(
      *         response=200,
      *         description="User data retrieved successfully"
@@ -86,9 +87,16 @@ class UserController extends BaseController
      *     )
      * )
      */
-    public function show($id): JsonResponse
+    public function show(Request $request): JsonResponse
     {
-        return $this->sendDataResponse($this->userService->getById($id));
+        $headerValidator = Validator::make($request->header(), [
+            'user-id' => 'required|exists:users,id',
+        ]);
+        if ($headerValidator->fails()) {
+            return $this->sendError('user-id header is missing or invalid.');
+        }
+        $userId = (int)$request->header('user-id');
+        return $this->sendDataResponse($this->userService->getById($userId));
     }
 
 
@@ -174,17 +182,17 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     *     path="/api/users/{id}/upload-photo",
+     *     path="/api/users/upload-photo",
      *     summary="Upload profile photo",
      *     tags={"User"},
      *     security={{"sanctum":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="User ID",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
+     *      @OA\Parameter(
+     *           name="user-id",
+     *           in="header",
+     *           required=true,
+     *           description="Authenticated user's ID",
+     *           @OA\Schema(type="integer", example=1)
+     *       ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -210,27 +218,34 @@ class UserController extends BaseController
      *     )
      * )
      */
-    public function uploadProfilePhoto(Request $request, $id): JsonResponse
+    public function uploadProfilePhoto(Request $request): JsonResponse
     {
+        $headerValidator = Validator::make($request->header(), [
+            'user-id' => 'required|exists:users,id',
+        ]);
+        if ($headerValidator->fails()) {
+            return $this->sendError('user-id header is missing or invalid.');
+        }
+        $userId = (int)$request->header('user-id');
         $request->validate([
             'profile_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
-        return $this->userService->uploadProfilePhoto($id, $request);
+        return $this->userService->uploadProfilePhoto($userId, $request);
     }
 
     /**
      * @OA\Patch(
-     *     path="/api/users/{id}/delete-photo",
+     *     path="/api/users/delete-photo",
      *     summary="Delete profile photo",
      *     tags={"User"},
      *     security={{"sanctum":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="User ID",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
+     *      @OA\Parameter(
+     *           name="user-id",
+     *           in="header",
+     *           required=true,
+     *           description="Authenticated user's ID",
+     *           @OA\Schema(type="integer", example=1)
+     *       ),
      *     @OA\Response(
      *         response=204,
      *         description="Profile photo deleted successfully"
@@ -241,8 +256,15 @@ class UserController extends BaseController
      *     )
      * )
      */
-    public function deleteProfilePhoto($id)
+    public function deleteProfilePhoto(Request $request): JsonResponse
     {
-        $this->userService->deleteProfilPhoto($id);
+        $headerValidator = Validator::make($request->header(), [
+            'user-id' => 'required|exists:users,id',
+        ]);
+        if ($headerValidator->fails()) {
+            return $this->sendError('user-id header is missing or invalid.');
+        }
+        $userId = (int)$request->header('user-id');
+        $this->userService->deleteProfilPhoto($userId);
     }
 }

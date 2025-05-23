@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class FlightService
 {
-    public function getAllByDate(string $date, int $userId)
+    public function getAllByDate(string $date)
     {
         $start = Carbon::parse($date)->startOfDay();
         $end = Carbon::parse($date)->endOfDay();
@@ -40,24 +40,19 @@ class FlightService
             ->get();
     }
 
-    public function create(int $userId, array $payload)
+    public function create(array $payload)
     {
-        return DB::transaction(function () use ($userId, $payload) {
-            $payload['created_by'] = $userId;
-            //check if user is admin
-
+        return DB::transaction(function () use ($payload) {
             $payload = Flight::query()->create($payload);
 
             return $payload->id;
         });
     }
 
-    public function update(int $userId, int $flightId, array $payload): void
+    public function update(int $flightId, array $payload): void
     {
         //check if user is admin
         $flight = Flight::query()->findOrFail($flightId);
-
-        $payload['updated_by'] = $userId;
 
         $flight->update($payload);
     }
