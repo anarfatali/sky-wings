@@ -20,7 +20,7 @@ class FlightResponse
         public int    $total_seats,
         public int    $econom_free_seats,
         public int    $business_free_seats,
-        public string $booked_seats,
+        public ?string $booked_seats,
         public string $econom_price,
         public string $business_price,
         public string $flight_number,

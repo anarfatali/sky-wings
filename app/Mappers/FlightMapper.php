@@ -7,7 +7,7 @@ use App\Models\Flight;
 
 class FlightMapper
 {
-    public static function  toResponse(Flight $flight): FlightResponse
+    public static function toResponse(Flight $flight): FlightResponse
     {
         return new FlightResponse(
             id: $flight->id,

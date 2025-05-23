@@ -201,7 +201,7 @@ class FlightController extends BaseController
 
         $flight = $this->flightService->create($data);
 
-        return $this->sendDataResponse(FlightMapper::toResponse($flight), 'Flight created', 201);
+        return $this->sendDataResponse($flight, 'Flight created', 201);
     }
 
     /**
