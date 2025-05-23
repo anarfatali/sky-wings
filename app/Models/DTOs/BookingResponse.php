@@ -12,6 +12,7 @@ class BookingResponse
         public string         $created_at,
         public string         $updated_at,
         public FlightResponse $flight,
+        public array          $passengers
     )
     {
     }
