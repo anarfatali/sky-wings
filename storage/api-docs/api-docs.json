@@ -365,7 +365,7 @@
                                                 },
                                                 "seat_number": {
                                                     "type": "string",
-                                                    "example": "12A"
+                                                    "example": "A12"
                                                 },
                                                 "phone_number": {
                                                     "type": "string",

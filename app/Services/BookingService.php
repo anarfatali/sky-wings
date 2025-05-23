@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\BadRequestException;
+use App\Mappers\BookingMapper;
 use App\Models\Booking;
 use App\Models\Flight;
 use App\Models\Passenger;
@@ -64,7 +65,8 @@ class BookingService
                 $query->where('flight_date', '>', Carbon::now());
             })
             ->with('flight')
-            ->get();
+            ->get()
+            ->map(fn($booking) => BookingMapper::toResponse($booking));
     }
 
     public function getHistory(int $userId)
@@ -75,6 +77,7 @@ class BookingService
                 $query->where('flight_date', '<', Carbon::now());
             })
             ->with('flight')
-            ->get();
+            ->get()
+            ->map(fn($booking) => BookingMapper::toResponse($booking));
     }
 }

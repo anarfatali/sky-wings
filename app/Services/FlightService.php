@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Mappers\FlightMapper;
 use App\Models\Flight;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class FlightService
@@ -13,17 +15,31 @@ class FlightService
         $start = Carbon::parse($date)->startOfDay();
         $end = Carbon::parse($date)->endOfDay();
 
-        return Flight::query()->whereBetween('flight_date', [$start, $end])->paginate(5);
+        $flights = Flight::query()
+            ->whereBetween('flight_date', [$start, $end])
+            ->paginate(5);
+
+        $mapped = $flights->getCollection()->map(function ($flight) {
+            return FlightMapper::toResponse($flight);
+        });
+
+        return new LengthAwarePaginator(
+            $mapped,
+            $flights->total(),
+            $flights->perPage(),
+            $flights->currentPage(),
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
     }
 
     public function getById(int $id)
     {
-        return Flight::query()->findOrFail($id);
+        return FlightMapper::toResponse(Flight::query()->findOrFail($id));
     }
 
     public function search(array $filter)
     {
-        return Flight::query()
+        $flights = Flight::query()
             ->whereHas('departureAirport', function ($q) use ($filter) {
                 $q->where('city', $filter['from']);
             })
@@ -38,6 +54,7 @@ class FlightService
             ->orWhere('econom_free_seats', '>=', (int)$filter['passenger_count'])
             ->orderBy('flight_date')
             ->get();
+        return $flights->map(fn($flight) => FlightMapper::toResponse($flight));
     }
 
     public function create(array $payload)

@@ -41,7 +41,7 @@ class BookingController extends BaseController
      *                     @OA\Property(property="surname", type="string", example="Doe"),
      *                     @OA\Property(property="is_female", type="boolean", example=false),
      *                     @OA\Property(property="date_of_birth", type="string", format="date", example="2000-01-01"),
-     *                     @OA\Property(property="seat_number", type="string", example="12A"),
+     *                     @OA\Property(property="seat_number", type="string", example="A12"),
      *                     @OA\Property(property="phone_number", type="string", example="+123456789")
      *                 )
      *             )
