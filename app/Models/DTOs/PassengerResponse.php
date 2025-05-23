@@ -8,9 +8,9 @@ class PassengerResponse
         public int    $id,
         public string $name,
         public string $surname,
-        public bool   $isFemale,
-        public string $dateOfBirth,
-        public string $seatNumber
+        public bool   $is_female,
+        public string $date_of_birth,
+        public string $seat_number
     )
     {
     }

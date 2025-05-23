@@ -22,9 +22,9 @@ class BookingMapper
                 id: $p->id,
                 name: $p->name,
                 surname: $p->surname,
-                isFemale: $p->is_female,
-                dateOfBirth: $p->date_of_birth,
-                seatNumber: $p->seat_number,
+                is_female: $p->is_female,
+                date_of_birth: $p->date_of_birth,
+                seat_number: $p->seat_number,
             ))->toArray()
         );
     }
