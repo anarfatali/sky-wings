@@ -930,6 +930,33 @@
             }
         },
         "/api/users": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user by ID",
+                "operationId": "953fbe16ca028c3d65368ea6ce5a1ba4",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User data retrieved successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "User"
@@ -992,34 +1019,6 @@
                                 }
                             }
                         }
-                    }
-                }
-            }
-        },
-        "/api/users/{id}": {
-            "get": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get user by ID",
-                "operationId": "36a33ff774d5cba33c039dec2c3e0287",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User data retrieved successfully"
-                    },
-                    "404": {
-                        "description": "User not found"
                     }
                 }
             }
@@ -1124,21 +1123,22 @@
                 ]
             }
         },
-        "/api/users/{id}/upload-photo": {
+        "/api/users/upload-photo": {
             "post": {
                 "tags": [
                     "User"
                 ],
                 "summary": "Upload profile photo",
-                "operationId": "15911b10129fa5b881683df02058e11e",
+                "operationId": "dd4c200f7aa76db4744fcb0eed8e18dc",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "User ID",
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -1177,21 +1177,22 @@
                 ]
             }
         },
-        "/api/users/{id}/delete-photo": {
+        "/api/users/delete-photo": {
             "patch": {
                 "tags": [
                     "User"
                 ],
                 "summary": "Delete profile photo",
-                "operationId": "c66c681f1ba6c915a10dd48d2ca67a54",
+                "operationId": "3865d6bd575a006465db1b7abe9426e3",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "User ID",
+                        "name": "user-id",
+                        "in": "header",
+                        "description": "Authenticated user's ID",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],

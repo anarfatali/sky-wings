@@ -22,13 +22,6 @@ class FlightController extends BaseController
      *     summary="Get flights by date",
      *     tags={"Flights"},
      *     @OA\Parameter(
-     *          name="user-id",
-     *          in="header",
-     *          required=true,
-     *          description="Authenticated user's ID",
-     *          @OA\Schema(type="integer", example=1)
-     *      ),
-     *     @OA\Parameter(
      *         name="date",
      *         in="query",
      *         required=true,
@@ -62,14 +55,6 @@ class FlightController extends BaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $headerValidator = Validator::make($request->header(), [
-            'user-id' => 'required|exists:users,id',
-        ]);
-        if ($headerValidator->fails()) {
-            return $this->sendError('user-id header is missing or invalid.');
-        }
-        $userId = (int)$request->header('user-id');
-
         $validator = Validator::make($request->all(), [
             'date' => 'required|date_format:Y-m-d',
         ]);
@@ -80,7 +65,7 @@ class FlightController extends BaseController
 
         $date = $validator->validated()['date'];
 
-        $flights = $this->flightService->getAllByDate($date, $userId);
+        $flights = $this->flightService->getAllByDate($date);
 
         return $this->sendDataResponse($flights);
     }
@@ -118,13 +103,6 @@ class FlightController extends BaseController
      *     summary="Search for flights",
      *     tags={"Flights"},
      *     security={{"sanctum":{}}},
-     *      @OA\Parameter(
-     *           name="user-id",
-     *           in="header",
-     *           required=true,
-     *           description="Authenticated user's ID",
-     *           @OA\Schema(type="integer", example=1)
-     *       ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -146,14 +124,6 @@ class FlightController extends BaseController
      */
     public function search(Request $request): JsonResponse
     {
-        $headerValidator = Validator::make($request->header(), [
-            'user-id' => 'required|exists:users,id',
-        ]);
-
-        if ($headerValidator->fails()) {
-            return $this->sendError('user-id header is missing or invalid.');
-        }
-
         $validated = $request->validate([
             'from' => 'required|string',
             'to' => 'required|string',
@@ -172,13 +142,6 @@ class FlightController extends BaseController
      *     summary="Create a new flight",
      *     tags={"Flights"},
      *     security={{"sanctum":{}}},
-     *      @OA\Parameter(
-     *           name="user-id",
-     *           in="header",
-     *           required=true,
-     *           description="Authenticated user's ID",
-     *           @OA\Schema(type="integer", example=1)
-     *       ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -215,15 +178,6 @@ class FlightController extends BaseController
      */
     public function store(Request $request): JsonResponse
     {
-        $headerValidator = Validator::make($request->header(), [
-            'user-id' => 'required|exists:users,id',
-        ]);
-
-        if ($headerValidator->fails()) {
-            return $this->sendError('user-id header is missing or invalid.');
-        }
-        $userId = (int)$request->header('user-id');
-
         $validator = Validator::make($request->all(), [
             'departure_airport_id' => 'required|exists:airports,id',
             'arrival_airport_id' => 'required|exists:airports,id',
@@ -241,7 +195,7 @@ class FlightController extends BaseController
         }
         $data = $validator->validated();
 
-        $flight = $this->flightService->create($userId, $data);
+        $flight = $this->flightService->create($data);
 
         return $this->sendDataResponse($flight, 'Flight created', 201);
     }
@@ -252,13 +206,6 @@ class FlightController extends BaseController
      *     summary="Update flight by ID",
      *     tags={"Flights"},
      *     security={{"sanctum":{}}},
-     *      @OA\Parameter(
-     *           name="user-id",
-     *           in="header",
-     *           required=true,
-     *           description="Authenticated user's ID",
-     *           @OA\Schema(type="integer", example=1)
-     *       ),
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -287,15 +234,6 @@ class FlightController extends BaseController
      */
     public function update(Request $request, int $flightId): JsonResponse
     {
-        $headerValidator = Validator::make($request->header(), [
-            'user-id' => 'required|exists:users,id',
-        ]);
-
-        if ($headerValidator->fails()) {
-            return $this->sendError('user-id header is missing or invalid.');
-        }
-        $userId = (int)$request->header('user-id');
-
         $validator = Validator::make($request->all(), [
             'departure_airport_id' => 'sometimes|required|exists:airports,id',
             'arrival_airport_id' => 'sometimes|required|exists:airports,id',
@@ -313,7 +251,7 @@ class FlightController extends BaseController
         }
         $data = $validator->validated();
 
-        $this->flightService->update($userId, $flightId, $data);
+        $this->flightService->update($flightId, $data);
 
         return $this->sendDataResponse('Flight updated successfully!', 204);
     }
