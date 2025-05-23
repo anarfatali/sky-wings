@@ -27,9 +27,10 @@ WORKDIR /var/www
 
 COPY --from=build /app /var/www
 
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www && php artisan storage:link && php artisan l5-swagger:generate
 
 EXPOSE 8000
+USER www-data:www-data
 
 CMD php artisan serve --host=0.0.0.0 --port=8000
 

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mappers\FlightMapper;
 use App\Models\enums\City;
 use App\Services\FlightService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\CodeUnit\Mapper;
 use Illuminate\Validation\Rules\Enum;
 
 class FlightController extends BaseController
@@ -199,7 +201,7 @@ class FlightController extends BaseController
 
         $flight = $this->flightService->create($data);
 
-        return $this->sendDataResponse($flight, 'Flight created', 201);
+        return $this->sendDataResponse(FlightMapper::toResponse($flight), 'Flight created', 201);
     }
 
     /**
@@ -255,7 +257,7 @@ class FlightController extends BaseController
 
         $this->flightService->update($flightId, $data);
 
-        return $this->sendDataResponse('Flight updated successfully!', 204);
+        return $this->sendResponse('Flight updated successfully!', 204);
     }
 
     /**

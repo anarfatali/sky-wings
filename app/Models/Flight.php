@@ -56,9 +56,4 @@ class Flight extends Model
         $lastDigit = random_int(0, 9);
         return "J2 810{$lastDigit}";
     }
-
-    public function airport(): BelongsTo
-    {
-        return $this->belongsTo(Airport::class);
-    }
 }
